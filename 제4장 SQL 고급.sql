@@ -12,7 +12,6 @@ create table `Member`(
         `rdate` varchar(30) NOT NULL
 		);
         
-        
 create table `Department`(
 		`depNo` int primary key,
         `name`	varchar(10) NOT NULL,
@@ -47,7 +46,6 @@ insert into `Department` values('104', '영업4부', '051-512-1004');
 insert into `Department` values('105', '영업5부', '051-512-1005');
 insert into `Department` values('106', '영업지원부', '051-512-1006');
 insert into `Department` values('107', '인사부', '051-512-1007');
-
 
 insert into `Sales` (`uid`, `year`, `month`, `sale`) values('a101', '2018', '1', 98100);
 insert into `Sales` (`uid`, `year`, `month`, `sale`) values('a102', '2018', '1', 136000);
@@ -86,12 +84,69 @@ insert into `Sales` (`uid`, `year`, `month`, `sale`) values('a105', '2020', '2',
 insert into `Sales` (`uid`, `year`, `month`, `sale`) values('a106', '2020', '2', 76000);
 
 #실습 4-3
+select * from `Member` where `name`='김유신';
+select * from `Member` where `pos`='차장' AND dep=101;
+select * from `Member` where `pos`='차장' OR dep=101;
+select * from `Member` where `name` != '김춘추';
+select * from `Member` where `name` <> '김춘추';
+select * from `Member` where `pos`='사원' OR `pos`='대리';
+select * from `Member` where `pos` in('사원','대리');
+select * from `Member` where `name` like '%신';
+select * from `Member` where `name` like '김%';
+select * from `Member` where `name` like '김__';
+select * from `Member` where `name` like '_성_';
+select * from `Member` where `name` like '정_';
+select * from `Sales` where `sale` > 50000;
+select * from `Sales` where `sale` >= 50000 and `sale` < 100000 and `month`=1;
+select * from `Sales` where `Sale` between 50000 and 100000;
+select * from `Sales` where `sale` not between 50000 and 100000;
+select * from `Sales` where `year` in(2020);
+select * from `Sales` where `month` in(1, 2);
+
 #실습 4-4
+select * from `Sales` order by `sale`;
+select * from `Sales` order by `sale` asc;
+select * from `Sales` order by `sale` desc;
+select * from `Member` order by `name`;
+select * from `Member` order by `name` desc;
+select * from `Member` order by `rdate` asc;
+select * from `Sales` where `sale` > 50000 order by `sale` desc;
+select * from `Sales` 
+		where `sale` > 50000 
+		order by `year`, `month`, `sale` desc;
+
 #실습 4-5
+select * from `Sales` limit 3;
+select * from `Sales` limit 0, 3;
+select * from `Sales` limit 1, 2;
+select * from `Sales` limit 5, 3;
+select * from `Sales` order by `sale` desc limit 3, 5;
+select * from `Sales` where `sale` < 50000 order by `sale` desc limit 3;
+select * from `Sales`
+		where `sale` > 50000
+        order by `year` desc, `month`, `sale` desc
+        limit 5;
+        
 #실습 4-6
+select sum(`sale`) as `매출총합` from `Sales`;
+select count(`seq`) as `갯수` from `Sales`;
+select substring(`hp`, 10, 4) `휴대폰 끝자리` from `Member`;
+insert into `Member` values ('b101', '을지문덕', '010-5555-1234', '사장', 107, now());
+
+
 #실습 4-7
+select sum(`sale`) as `2018년 1월 매출총합` from `Sales` where `month` in(1) and `year` in(2018);
 #실습 4-8
+select sum(`sale`) as `총합`,
+	   avg(`sale`) as `평균` 
+       from `Sales` 
+	   where `year` in(2019) and `month` in(2) and `sale` > 50000;
+
 #실습 4-9
+select min(`sale`) as `최저`,
+	   max(`sale`) as `최고`
+       from `Sales` where `year` in(2020);
+
 #실습 4-10
 #실습 4-11
 #실습 4-12
