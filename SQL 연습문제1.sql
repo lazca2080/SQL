@@ -155,4 +155,9 @@ on a.orderProduct = b.prodNo
 where `orderId` = 'c102';
 
 #실습 1-30
-
+select `orderId`, `name`, `prodName`, `orderDate`
+from `Order` as a
+join `Customer` as b
+on a.orderId = b.custId
+join `Product` as c
+on a.orderProduct = c.prodNo;
