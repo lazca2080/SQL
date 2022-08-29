@@ -151,7 +151,7 @@ order by `orderProduct` asc;
 #실습 1-29
 select a.orderId, b.prodName from `Order` as a
 join `Product` as b
-on a.orderNo = b.prodNo
+on a.orderProduct = b.prodNo
 where `orderId` = 'c102';
 
 #실습 1-30
