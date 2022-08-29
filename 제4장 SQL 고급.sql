@@ -9,7 +9,7 @@ create table `Member`(
         `hp` 	varchar(13) unique NOT NULL, 
         `pos` 	varchar(10) default '사원',
         `dep`	int,
-        `rdate` varchar(30) NOT NULL
+        `rdate` DATETIME NOT NULL
 		);
         
 create table `Department`(
@@ -148,11 +148,149 @@ select min(`sale`) as `최저`,
        from `Sales` where `year` in(2020);
 
 #실습 4-10
-#실습 4-11
-#실습 4-12
-#실습 4-13
-#실습 4-14
-#실습 4-15
-#실습 4-16
-#실습 4-17
+select * from `Sales` group by `uid`;
+select * from `Sales` group by `year`;
+select * from `Sales` group by `uid`, `year`;
+select `uid`, COUNT(*) as `건수` from `Sales` group by `uid`;
+select `uid`, Sum(`sale`) as `합계` from `Sales` group by `uid`;
+select `uid`, avg(`sale`) as `평균` from `Sales` group by `uid`;
 
+select `uid`, `year`, sum(`sale`) as `합계`
+from `Sales`
+group by `uid`, `year`;
+
+select `uid`, `year`, sum(`sale`) as `합계`
+from `Sales`
+group by `uid`, `year`
+order by `year` ASC, `합계` DESC;
+
+select * from `Sales` where `sale` >= 50000 group by `uid`, `year`;
+
+select `uid`, `year`, sum(`sale`) as `합계`
+from `Sales`
+where `sale` >= 50000
+group by `uid`, `year`
+order by `합계` desc;
+
+#실습 4-11
+select `uid`, sum(`sale`) as `합계` from `Sales`
+group by `uid`
+having `합계` >= 200000;
+
+select `uid`, `year`, sum(`sale`) as `합계`
+from `Sales`
+where `sale` >= 100000
+group by `uid`, `year`
+having `합계` >= 200000
+order by `합계` desc;
+
+#실습 4-12
+create table `Sales2` like `Sales`;
+insert into `sales2` select * from `Sales`;
+update `Sales2` set `year` = `year` + 3;
+
+select * from `Sales` union select * from `Sales2`;
+(select * from `Sales`) union (select * from `Sales2`);
+
+select `uid`, `year`, `sale` from `Sales`
+union
+select `uid`, `year`, `sale` from `Sales2`;
+
+select `uid`, `year`, sum(`sale`) as `합계`
+from `Sales`
+group by `uid`, `year`
+union
+select `uid`, `year`, sum(`sale`) as `합계`
+from `Sales2`
+group by `uid`, `year`
+order by `year` asc, `합계` desc;
+
+#실습 4-13
+select * from `Sales` inner join `Member` on `Sales`.uid = `Member`.uid;
+select * from `Member` inner join `Department` on `Member`.dep = `Department`.depNo;
+
+select * from `Sales` as a join `Member` as b on a.uid = b.uid;
+select * from `Member` as a join `Department` as b on a.dep = b.depNo;
+
+select * from `Sales` as a, `Member` as b where a.uid = b.uid;
+select * from `Member` as a, `Department` as b where a.dep = b.depNo;
+
+select 
+	a.`seq`,
+    a.`uid`,
+    `sale`,
+    `name`,
+    `pos`
+from `Sales` as a
+join `Member` as b
+using (`uid`);
+
+select
+	a.`seq`,
+    a.`uid`,
+    `sale`,
+    `name`,
+    `pos`
+from `Sales` as a
+join `Member` as b
+on a.`uid` = b.`uid`;
+
+select * from `Sales` as a
+join `Member` as b on a.uid = b.uid
+join `Department` as c on b.dep = c.depNo;
+
+select a.`seq`, a.`uid`, a.`sale`, b.`name`, b.`pos`, c`name`
+from `Sales` as a join `Member` as b on a.uid = b.uid
+join `Department` as c on b.dep = c.depNo;
+
+SELECT a.`seq`, a.`uid`, a.`sale`, b.`name`, b.`pos`, c.`name` FROM `Sales` AS a 
+ JOIN `Member` AS b ON a.uid = b.uid
+ JOIN `Department` AS c ON b.dep = c.depNo
+ WHERE `sale` > 100000
+ ORDER BY `sale` DESC;
+
+
+#실습 4-14
+select * from `Sales` as a
+right join `Member` as b
+on a.uid = b.uid;
+select * from `sales` as a
+left join `Member` as b on a.uid = b.uid;
+select a.`seq`, a.`uid`, `sale`, `name`, `pos` from `Sales` as a
+left join `Member` as b using(`uid`);
+
+select a.`seq`, a.`uid`, `sale`, `name`, `pos` from `Sales` as a
+right join `Member` as b using(`uid`);
+
+
+#실습 4-15
+select 
+	`uid`,
+    a.`name`,
+    `pos`,
+    b.`name`
+from `Member` as a
+join `Department` as b on a.dep = b.depNo;
+
+#실습 4-16
+select
+	sum(`sale`) as `2019 김유신 매출 합`
+from `Sales` as a
+join `Member` as b
+on a.uid = b.uid
+where `name` = '김유신' and `year` = 2019;
+
+#실습 4-17
+select
+	b.`name`,
+    c.`name`,
+    b.`pos`,
+    a.`year`,
+    sum(`sale`) as `매출 합`
+from `Sales` as a
+join `Member` as b on a.uid = b.uid
+join `Department` c on b.dep = c.depNo
+where `year`=2019 and `sale` >= 50000
+group by a.`uid`
+having `매출 합` >= 100000
+order by `매출 합` desc;
