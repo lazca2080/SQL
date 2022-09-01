@@ -67,18 +67,24 @@ insert into `Order` values (10, 'c107', 6, 1, now());
 
 #실습 1-4
 select * from `Customer`;
+
 #실습 1-5
 select `custID`, `name`, `hp` from `Customer`;
+
 #실습 1-6
 select * from `Product`;
+
 #실습 1-7
 select `company` from `Product`;
+
 #실습 1-8
+
 
 #실습 1-9
 select `prodName`, `price` from `Product`;
+
 #실습 1-10
-select `prodName`, `price` where `price`+`500` as `조정단가` from `Product`;
+select `prodName`, `price` where `price+500` as `조정단가` from `Product`;
 
 #실습 1-11
 select `prodName`, `stock`, `price` from `Product` 
@@ -114,7 +120,7 @@ select * from `Customer` order by `rdate` asc;
 
 #실습 1-20
 select * from `Order` 
-where `orderCount` >= 3 order by `orderProduct` desc;
+where `orderCount` >= 3 order by `orderNo` asc;
 
 #실습 1-21
 select AVG(`price`) from `Product`;
@@ -160,4 +166,5 @@ from `Order` as a
 join `Customer` as b
 on a.orderId = b.custId
 join `Product` as c
-on a.orderProduct = c.prodNo;
+on a.orderProduct = c.prodNo
+where substr(`orderDate`, 1, 10) = '2022-07-03';
